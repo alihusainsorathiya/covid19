@@ -1,9 +1,11 @@
+import 'dart:html';
+
 import 'package:covid19/dcl.dart';
 import 'package:flutter/material.dart';
-
+import 'apiservice.dart';
 import 'homepage.dart';
 
-class NameSearch extends SearchDelegate<DclModel> {
+class NameSearch extends SearchDelegate<Report> {
   final List<Report> dclModelList;
 
   String token;
@@ -13,7 +15,9 @@ class NameSearch extends SearchDelegate<DclModel> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        onPressed: () {},
+        onPressed: () {
+          query = "";
+        },
         icon: Icon(Icons.clear),
       ),
     ];
@@ -22,33 +26,84 @@ class NameSearch extends SearchDelegate<DclModel> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pop(context);
+      },
       icon: Icon(Icons.arrow_back),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    var suggestions = dclModelList.where((element) {
-      // DclModel dclModel = DclModel();
-      return dclModelList.contains(element);
-    });
+    // var suggestions;
+    // var suggestions = dclModelList.where((element) {
+    //   // DclModel dclModel = DclModel();
+    //   return dclModelList.contains(element);
+    var suggestions;
+    // for (int i = 0; i < dclModelList.length; i++) {
+    //   suggestions[i] = dclModelList
+    //       .where((element) =>
+    //           element.reports![i].jotformTestDclCode!.contains(query))
+    //       .toList();
+    suggestions = dclModelList
+        .where((element) => element.jotformTestDclCode!.contains(query))
+        .toList();
 
-    return dclWidget(token, suggestions);
+    //  return suggestions;
+    // .where((element) => dclModelList.reports!.contains(element));
+    // });
+    // var reports = [];
+    // dclModelList.forEach((element) {
+    //   reports = element.reports!;
+    // });
+
+    //   var abc = reports
+    //       .where((element2) => element2.jotformTestDclCode!.contains(query))
+    //       .toList();
+
+    //   return abc;
+    // });
+
+    // final suggestions = dclModelList!.where((element) => (element.reports!.where((element2) => element2.jotformTestDclCode.toUpperCase().contains(query))));
+
+    // final suggestions = dclModelList!.where((element) => element
+    //     .reports!.where((element) => element.jotformTestDclCode.toUpperCase().contains(query));
+
+    // return dclWidget(token, suggestions);
+
+    return dclWidget(token, suggestions, suggestions.length);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var suggestions = dclModelList.where((element) {
-      // DclModel dclModel = DclModel();
-      return dclModelList.contains(element);
-    });
+    // var suggestions = dclModelList.where((element) {
+    //   return dclModelList.contains(element);
+//  });
 
-    return dclWidget(token, suggestions);
+    // final suggestions = dclModelList.reports!
+    //     .where((element) => dclModelList.reports!.contains(element));
+
+    // final suggestions = dclModelList.where((element) => dclModelList.contains(
+    //     element.reports!.where((element) =>
+    //         element.jotformTestDclCode!.toUpperCase().contains(query))));
+
+    var suggestions;
+    for (int i = 0; i < dclModelList.length; i++) {
+      // suggestions[i] = dclModelList
+      //     .where((element) =>
+      //         element.reports![i].jotformTestDclCode!.contains(query))
+      //     .toList();
+
+      suggestions = dclModelList
+          .where((element) => element.jotformTestDclCode!.contains(query))
+          .toList();
+    }
+    return dclWidget(token, suggestions, suggestions.length);
   }
 
-  Widget dclWidget(String token, Iterable<Report> suggestions) {
+  Widget dclWidget(String token, Iterable<Report> suggestions, int length) {
     debugPrint(suggestions.length.toString());
+    var apiresult2;
     return Expanded(
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -56,9 +111,10 @@ class NameSearch extends SearchDelegate<DclModel> {
         shrinkWrap: true,
         //                   var newresult = report.result.toString();
         //                   newresult = newresult.replaceAll("Result.", "");
-        itemCount: suggestions.length,
+        itemCount: length,
         itemBuilder: (context, index) {
           var report = suggestions.elementAt(index);
+
           // var report = report1.reports![index];
           // debugPrint(report.jotformTestDclCode);
           // var reportsList = dclSnap.data[index];
@@ -95,8 +151,8 @@ class NameSearch extends SearchDelegate<DclModel> {
                           backgroundColor: Colors.purple[400]),
                       onPressed: () async {
                         print("Positive");
-                        apiresult2 =
-                            await sendResult(report, token, "POSITIVE");
+                        apiresult2 = await Apiservice()
+                            .sendResult(report, token, "POSITIVE");
                         // apiresult2 = " SENT POSITIVE";
 
                         Scaffold.of(context).showSnackBar(SnackBar(
@@ -113,8 +169,8 @@ class NameSearch extends SearchDelegate<DclModel> {
                       onPressed: () async {
                         print("Negative");
 
-                        apiresult2 =
-                            await sendResult(report, token, "NEGATIVE");
+                        apiresult2 = await Apiservice()
+                            .sendResult(report, token, "NEGATIVE");
                         Scaffold.of(context).showSnackBar(SnackBar(
                             content: Text(report.jotformTestDclCode.toString() +
                                 ": " +
