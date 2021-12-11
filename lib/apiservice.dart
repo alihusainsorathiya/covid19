@@ -12,6 +12,7 @@ class Apiservice {
   List<Report> data = [];
   DclModel results = DclModel();
   List<Report> result2 = [];
+  List<Report> rep = [];
   String token = "";
   getToken() async {
     String loginurl = 'https://dlcserver.xyz/api/v1/auth/login';
@@ -22,6 +23,7 @@ class Apiservice {
         headers: {'Content-Type': 'application/json'});
     debugPrint(response.body.toString());
     debugPrint(response.statusCode.toString());
+
     // await Future.delayed(Duration(seconds: 2));
     // list = jsonDecode(response.body);
     token = jsonDecode(response.body)['token'].toString();
@@ -49,10 +51,50 @@ class Apiservice {
 
         // result2 = data.map((e) => DclModel.fromJson(json.decode(response.body);
         // result2 = Report.fromJson(response.body.);
-        print("abc: " + dclModelFromJson(response.body).reports![0].toString());
+        // print("abc: " + dclModelFromJson(response.body).reports![0].toString());
         results = dclModelFromJson(response.body);
-        print(results.reports![0].toString());
+        // print(results.reports![0].toString());
         // result2.addAll(results.reports!);
+
+        // var jsonData = json.decode(response.body);
+
+        // for (var u in jsonData) {
+        //   Report reportz = Report(
+        //     id: u['_id'],
+        //     addressFull: u["address_full"],
+        //     cliId: u["cliID"],
+        //     collectionDate: u["collectionDate"],
+        //     countSend: u["count_send"],
+        //     created: u["created"],
+        //     createdTime: u["createdTime"],
+        //     createdUser: u["createdUser"],
+        //     deletedAt: u["deletedAt"],
+        //     dob: u["dob"],
+        //     flag: u["flag"],
+        //     isDeleted: u["isDeleted"],
+        //     jotformId: u["jotform_id"],
+        //     jotformSubmissionDate: u["jotform_submission_date"],
+        //     jotformSubmissionId: u["jotform_submission_id"],
+        //     jotformTestDclCode: u["jotform_test_dcl_code"],
+        //     lastSend: u["last_send"],
+        //     lastUser: u["lastUser"],
+        //     patient: u["patient"],
+        //     patientEmail: u["patientEmail"],
+        //     patientId: u["patientId"],
+        //     pdfName: u["pdfName"],
+        //     pdfPath: u["pdfPath"],
+        //     phone: u["phone"],
+        //     reportDate: u["reportDate"],
+        //     reqId: u["reqID"],
+        //     result: u["result"],
+        //     sex: u["sex"],
+        //     status: u["status"],
+        //     test: u["test"],
+        //     v: u["__v"],
+        //   );
+        //   rep.add(reportz);
+        // }
+
         result2 = results.reports!.toList();
         print("results: ${result2[0].toString()}");
         // results = data.map((e) => DclModel.fromJson(e)).toList();
