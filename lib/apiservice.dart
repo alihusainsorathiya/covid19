@@ -14,9 +14,10 @@ class Apiservice {
   List<Report> result2 = [];
   List<Report> rep = [];
   String token = "";
-  getToken() async {
+  getToken(String username, password) async {
     String loginurl = 'https://dlcserver.xyz/api/v1/auth/login';
-    var credentials = {"username": "algonquin", "password": "QV2658rapids"};
+    // var credentials = {"username": "algonquin", "password": "QV2658rapids"};
+    var credentials = {"username": username, "password": password};
 
     var response = await http.post(Uri.parse(loginurl),
         body: jsonEncode(credentials),
@@ -27,10 +28,11 @@ class Apiservice {
     // await Future.delayed(Duration(seconds: 2));
     // list = jsonDecode(response.body);
     token = jsonDecode(response.body)['token'].toString();
-
+    print("inside API Call: " + token.toString());
+    return token;
     // return token;
 
-    getdclData(token);
+    // getdclData(token);
   }
 
   Future<List<Report>> getdclData(String token) async {
@@ -48,11 +50,12 @@ class Apiservice {
       if (response.statusCode == 200) {
         print("inside");
         // data = json.decode(response.body);
+        // print(data[0]);
 
         // result2 = data.map((e) => DclModel.fromJson(json.decode(response.body);
         // result2 = Report.fromJson(response.body.);
         // print("abc: " + dclModelFromJson(response.body).reports![0].toString());
-        results = dclModelFromJson(response.body);
+        results = dclModelFromMap(response.body);
         // print(results.reports![0].toString());
         // result2.addAll(results.reports!);
 

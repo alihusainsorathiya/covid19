@@ -1,9 +1,9 @@
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:covid19/dcl.dart';
 import 'package:flutter/material.dart';
 import 'apiservice.dart';
-import 'homepage.dart';
+// import 'homepage.dart';
 
 class NameSearch extends SearchDelegate<Report> {
   final List<Report> dclModelList;
@@ -104,96 +104,163 @@ class NameSearch extends SearchDelegate<Report> {
   Widget dclWidget(String token, Iterable<Report> suggestions, int length) {
     debugPrint(suggestions.length.toString());
     var apiresult2;
-    return Expanded(
-      child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        // itemCount: model.reports!.length,
-        shrinkWrap: true,
-        //                   var newresult = report.result.toString();
-        //                   newresult = newresult.replaceAll("Result.", "");
-        itemCount: length,
-        itemBuilder: (context, index) {
-          var report = suggestions.elementAt(index);
 
-          // var report = report1.reports![index];
-          // debugPrint(report.jotformTestDclCode);
-          // var reportsList = dclSnap.data[index];
-          // var report = model.reports![index];
-          // dclList.add(dclModel.reports.dc.toString());
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (context, index) {
+        var report = suggestions.elementAt(index);
+        // var report = reports[index];
+        // print("result2::" + reports[index].result.toString());
+        //  newresult = newresult.replac
+        //eAll("Result.", "");
+        // var resultcolor = report.result![index].toString();
+        var resultcolor = report.result.toString();
 
-          var newresult = report.result.toString();
-          newresult = newresult.replaceAll("Result.", "");
-          // height: MediaQuery.of(context).size.height * 0.125,
-          return Card(
-            margin: EdgeInsets.all(3),
-            color: newresult == "POSITIVE" || newresult == "NEGATIVE"
-                ? Colors.deepOrange[200]
-                : Colors.cyan[50],
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+        // var resultcolor1 = report.result.toString();
+        // print("Result Color : " + resultcolor);
+        resultcolor = resultcolor.replaceAll("Result.", "");
+        // print("Result Color : " + resultcolor[0]);
+        return Card(
+          color: resultcolor == "POSITIVE"
+              ? Colors.red.shade200
+              : resultcolor == "NEGATIVE"
+                  ? Colors.green.shade200
+                  : Colors.white,
+          child: ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  // mainAxisAlignment:
-                  //     MainAxisAlignment.spaceEvenly,
+                Container(
+                  height: 45,
+                  width: 75,
+                  decoration: BoxDecoration(
+                    color: Colors.purple[400],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "${report.jotformTestDclCode.toString()}",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        Text(report.jotformTestDclCode.toString()),
-                        Text(newresult),
-                        // Text(report.patientEmail.toString()),
-                      ],
+                    Text("${report.patient.toString()}",
+                        style: report.patient.toString().length > 15
+                            ? report.patient.toString().length > 20
+                                ? TextStyle(
+                                    fontSize: 9, fontWeight: FontWeight.w600)
+                                : TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.w600)
+                            : TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.w600)),
+                    Text(
+                      "${report.patientEmail.toString()}",
+                      style: report.patientEmail.toString().length > 20
+                          ? TextStyle(
+                              fontSize: 8,
+                            )
+                          : TextStyle(
+                              fontSize: 9,
+                            ),
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: Colors.purple[400]),
-                      onPressed: () async {
-                        print("Positive");
-                        apiresult2 = await Apiservice()
-                            .sendResult(report, token, "POSITIVE");
-                        // apiresult2 = " SENT POSITIVE";
-
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text(report.jotformTestDclCode.toString() +
-                                ": " +
-                                apiresult2.toString())));
-                      },
-                      child: Text("Positive"),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: Colors.purple[400]),
-                      onPressed: () async {
-                        print("Negative");
-
-                        apiresult2 = await Apiservice()
-                            .sendResult(report, token, "NEGATIVE");
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text(report.jotformTestDclCode.toString() +
-                                ": " +
-                                apiresult2.toString())));
-                      },
-                      child: Text("Negative"),
+                    SizedBox(
+                      width: 120,
+                      child: Text(
+                        "SITE: " + "${report.siteLocation.toString()}",
+                        style: report.patientEmail.toString().length > 20
+                            ? report.patient.toString().length > 30
+                                ? TextStyle(
+                                    fontSize: 5,
+                                    color: Colors.red,
+                                  )
+                                : TextStyle(
+                                    fontSize: 7,
+                                    color: Colors.red,
+                                  )
+                            : TextStyle(
+                                fontSize: 9,
+                                color: Colors.red,
+                              ),
+                      ),
                     ),
                   ],
                 ),
+                SizedBox(
+                  width: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    debugPrint("Pressed Positive");
+                    apiresult2 =
+                        Apiservice().sendResult(report, token, "POSITIVE");
+
+                    apiresult2 =
+                        "${report.jotformTestDclCode.toString() + "POSITIVE"}" +
+                            apiresult2;
+
+//                                 Scaffold.of(context).showSnackBar(SnackBar(
+//                                     content: Text(
+//                                         report.jotformTestDclCode.toString() +
+//                                             ": " +
+//                                             apiresult2.toString())));
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(apiresult2)));
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 55,
+                    decoration: BoxDecoration(
+                      color: Colors.purple[400],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "POSITIVE",
+                        style: TextStyle(color: Colors.white, fontSize: 10),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    debugPrint("Pressed Negative");
+                    apiresult2 =
+                        Apiservice().sendResult(report, token, "NEGATIVE");
+                    apiresult2 =
+                        "${report.jotformTestDclCode.toString() + "NEGATIVE"}" +
+                            apiresult2;
+
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(apiresult2)));
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 55,
+                    decoration: BoxDecoration(
+                      color: Colors.purple[400],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "NEGATIVE",
+                        style: TextStyle(color: Colors.white, fontSize: 10),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-            // child: Column(
-            //   children: <Widget>[
-            //     // Text("data : " +
-            //     //     model.reports![index].patient.toString()),
-            //     Container(
-            //         height: MediaQuery.of(context).size.height * 0.1,
-            //         child: dclCard(model.reports![index], token)),
-            //   ],
-            // ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

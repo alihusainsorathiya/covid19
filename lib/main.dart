@@ -1,6 +1,7 @@
+import 'package:covid19/loginpage.dart';
 import 'package:flutter/material.dart';
-import 'package:covid19/homepage.dart';
-import 'package:http/http.dart' as http;
+
+// import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Homepage(),
+      home: LoginPage(),
     );
   }
 }
