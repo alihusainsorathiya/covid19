@@ -148,14 +148,14 @@ class _HomepageState extends State<Homepage> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Container(
-                child: Column(
-                  children: [
-                    Center(
-                      // child: Text("Loading Data..."),
-                      child: CircularProgressIndicator(),
-                    ),
-                    Text("Loading Data..."),
-                  ],
+                child: Center(
+                  // child: Text("Loading Data..."),
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text("Loading Data..."),
+                    ],
+                  ),
                 ),
               );
             } else {
@@ -207,6 +207,7 @@ class _HomepageState extends State<Homepage> {
                             width: 5,
                           ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text("${report.patient.toString()}",
                                   style: report.patient.toString().length > 15
@@ -222,14 +223,18 @@ class _HomepageState extends State<Homepage> {
                                           fontWeight: FontWeight.w600)),
                               Text(
                                 "${report.patientEmail.toString()}",
-                                style:
-                                    report.patientEmail.toString().length > 20
+                                style: report.patientEmail.toString().length >
+                                        20
+                                    ? report.patientEmail.toString().length > 25
                                         ? TextStyle(
-                                            fontSize: 8,
+                                            fontSize: 7,
                                           )
                                         : TextStyle(
-                                            fontSize: 9,
-                                          ),
+                                            fontSize: 8,
+                                          )
+                                    : TextStyle(
+                                        fontSize: 9,
+                                      ),
                               ),
                               SizedBox(
                                 width: 120,
