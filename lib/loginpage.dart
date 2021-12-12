@@ -18,24 +18,28 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign Up Api'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image(
+              image: AssetImage('assets/images/covidimage.png'),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             TextFormField(
               controller: emailController,
-              decoration: InputDecoration(hintText: 'Email'),
+              decoration: InputDecoration(hintText: 'Username'),
             ),
             SizedBox(
               height: 20,
             ),
             TextFormField(
               controller: passwordController,
+              obscureText: true,
               decoration: InputDecoration(hintText: 'Password'),
             ),
             SizedBox(
@@ -70,13 +74,29 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(
                 height: 50,
                 decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: Colors.blue,
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
                   child: Text('Login'),
                 ),
               ),
             ),
+            SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.code,
+                  color: Colors.red,
+                  size: 18,
+                ),
+                Text(
+                  "Developed by Ali Husain Sorathiya",
+                  style: TextStyle(fontSize: 10),
+                )
+              ],
+            )
           ],
         ),
       ),

@@ -119,7 +119,7 @@ class Apiservice {
     var now1 = new DateTime.now();
     var formatter = new DateFormat('yyyy/MM/dd');
     String formattedDate = formatter.format(now1);
-    formattedDate = '2021/12/10';
+    // formattedDate = '2021/12/10';
     return formattedDate;
   }
 
