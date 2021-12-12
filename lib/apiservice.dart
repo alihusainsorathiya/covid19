@@ -206,6 +206,8 @@ class Apiservice {
       // "created": "2021-12-05T04:20:28.006Z",
       "created": usatztime,
       "__v": 0,
+      "site_location": report.siteLocation.toString(),
+      "site_code": report.siteCode.toString(),
       "locationId": "6110bc0c004d735e8420575c",
       // "time": "5:54 am"
       "time": timetoSend
