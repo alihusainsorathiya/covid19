@@ -118,14 +118,9 @@ class _HomepageState extends State<Homepage> {
                     itemCount: reports.length,
                     itemBuilder: (context, index) {
                       var report = reports[index];
-                      // print("result2::" + reports[index].result.toString());
-                      //  newresult = newresult.replac
-                      //eAll("Result.", "");
-                      // var resultcolor = report.result![index].toString();
+
                       var resultcolor = report.result.toString();
 
-                      // var resultcolor1 = report.result.toString();
-                      // print("Result Color : " + resultcolor);
                       resultcolor = resultcolor.replaceAll("Result.", "");
                       // print("Result Color : " + resultcolor[0]);
                       return Card(
@@ -223,38 +218,7 @@ class _HomepageState extends State<Homepage> {
                               SizedBox(
                                 width: 5,
                               ),
-                              InkWell(
-                                onTap: () {
-                                  debugPrint("Pressed Positive");
-                                  apiresult2 =
-                                      api.sendResult(report, token, "POSITIVE");
 
-                                  apiresult2 =
-                                      "${report.jotformTestDclCode.toString() + "POSITIVE"}" +
-                                          apiresult2;
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(apiresult2)));
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 55,
-                                  decoration: BoxDecoration(
-                                    color: Colors.purple[400],
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "POSITIVE",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
                               InkWell(
                                 onTap: () {
                                   debugPrint("Pressed Negative");
@@ -265,54 +229,99 @@ class _HomepageState extends State<Homepage> {
                                       return WillPopScope(
                                         onWillPop: () async => false,
                                         child: AlertDialog(
-                                          title: Text('Title'),
-                                          content: Text('This is Demo'),
+                                          title: Center(
+                                              child: Text(
+                                                  'Do you Want to send NEGATIVE?')),
+                                          content: Container(
+                                            height: 100,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Name: " +
+                                                    report.patient.toString()),
+                                                Text("Email: " +
+                                                    report.patientEmail
+                                                        .toString()),
+                                                Text("DOB: " +
+                                                    report.dob.toString()),
+                                                Text("Result: " + "NEGATIVE"),
+                                              ],
+                                            ),
+                                          ),
                                           actions: <Widget>[
-                                            FlatButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: Text('Go Back'),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ElevatedButton(
+                                                  // NEGATIVE -> Elevated Button ->NO
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors
+                                                              .green.shade300,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      30,
+                                                                  vertical:
+                                                                      10)),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  child: Text(
+                                                    'NO',
+                                                    style:
+                                                        TextStyle(fontSize: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors
+                                                              .green.shade300,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      30,
+                                                                  vertical:
+                                                                      10)),
+                                                  // Positive -> Elevated Button ->YES
+                                                  onPressed: () {
+                                                    apiresult2 = api.sendResult(
+                                                        report,
+                                                        token,
+                                                        "POSITIVE");
+                                                    apiresult2 =
+                                                        "${report.jotformTestDclCode.toString() + "NEGATIVE"}" +
+                                                            apiresult2;
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                apiresult2)));
+
+                                                    setState(() {});
+
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'YES',
+                                                    style:
+                                                        TextStyle(fontSize: 18),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       );
                                     },
                                   );
-                                  // apiresult2 =    api.sendResult(report, token, "NEGATIVE");
-                                  apiresult2 =
-                                      "${report.jotformTestDclCode.toString() + "NEGATIVE"}" +
-                                          apiresult2;
-
-                                  //     SnackBar(content: Text(apiresult2)));
-
-                                  new AlertDialog(
-                                      title: new Text('Test'),
-                                      content: Column(
-                                        children: [
-                                          Container(
-                                            color: Colors.purple,
-                                            child: Column(
-                                              children: [
-                                                Text("Are you sure?"),
-                                                Text(""),
-                                                Text(
-                                                    "STOP - before finalizing this Rapid result, verify that the patient belongs to the correct site location. If not, please cancel and try again."),
-                                                Container(
-                                                  child: Column(
-                                                    children: [
-                                                      Text("Patient E-Mail	"),
-                                                      Text("Patient E-Mail	"),
-                                                      Text("Patient E-Mail	"),
-                                                      Text("Patient E-Mail	"),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ));
                                 },
+                                // Positive Button
                                 child: Container(
                                   height: 40,
                                   width: 55,
@@ -323,6 +332,131 @@ class _HomepageState extends State<Homepage> {
                                   child: Center(
                                     child: Text(
                                       "NEGATIVE",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              //Positive
+                              InkWell(
+                                onTap: () {
+                                  debugPrint("Pressed POSITIVE");
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: AlertDialog(
+                                          title: Center(
+                                              child: Text(
+                                                  'Do you want to send POSITIVE?')),
+                                          content: Container(
+                                            height: 100,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Name: " +
+                                                    report.patient.toString()),
+                                                Text("Email: " +
+                                                    report.patientEmail
+                                                        .toString()),
+                                                Text("DOB: " +
+                                                    report.dob.toString()),
+                                                Text("Result: " + "POSITIVE"),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                // Positive -> Elevated Button ->NO
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors
+                                                              .green.shade300,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      30,
+                                                                  vertical:
+                                                                      10)),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  child: Text(
+                                                    'NO',
+                                                    style:
+                                                        TextStyle(fontSize: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: Colors
+                                                              .green.shade300,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      30,
+                                                                  vertical:
+                                                                      10)),
+                                                  // Positive -> Elevated Button ->YES
+                                                  onPressed: () {
+                                                    //                       apiresult2 =
+                                                    //     api.sendResult(report, token, "POSITIVE");
+
+                                                    apiresult2 =
+                                                        "${report.jotformTestDclCode.toString() + "POSITIVE"}" +
+                                                            apiresult2;
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                apiresult2)));
+                                                    Navigator.pop(context);
+
+                                                    setState(() {});
+                                                  },
+                                                  child: Text(
+                                                    'YES',
+                                                    style:
+                                                        TextStyle(fontSize: 18),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  // apiresult2 =    api.sendResult(report, token, "NEGATIVE");
+                                  // apiresult2 =
+                                  //     "${report.jotformTestDclCode.toString() + "NEGATIVE"}" +
+                                  //         apiresult2;
+                                },
+                                //Negative Button
+                                child: Container(
+                                  height: 40,
+                                  width: 55,
+                                  decoration: BoxDecoration(
+                                    color: Colors.purple[400],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "POSITIVE",
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 10),
                                     ),
