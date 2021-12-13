@@ -123,6 +123,41 @@ class Apiservice {
     return formattedDate;
   }
 
+  String getUSADate() {
+    // tz.initializeTimeZones();
+    // var locations = tz.timeZoneDatabase.locations;
+
+    // DateTime time;
+    // tz.TZDateTime usatzdatetime;
+
+    // final DateTime now = DateTime.now();
+    // final cstTimezone = tz.getLocation('America/Guatemala');
+    // // DateTime usatzdatetime = tz.TZDateTime.from(now, cstTimezone);
+    // usatzdatetime = tz.TZDateTime.from(now, cstTimezone);
+
+    DateTime usDate = getUSDATE();
+    var formatter = new DateFormat('yyyy/MM/dd');
+    String formattedDate = formatter.format(usDate);
+
+    print("USA DATE: " + formattedDate.toString());
+    return formattedDate.toString();
+  }
+
+  DateTime getUSDATE() {
+    tz.initializeTimeZones();
+    // var locations = tz.timeZoneDatabase.locations;
+
+    DateTime time;
+    tz.TZDateTime usatzdatetime;
+
+    final DateTime now = DateTime.now();
+    final cstTimezone = tz.getLocation('America/Guatemala');
+    // DateTime usatzdatetime = tz.TZDateTime.from(now, cstTimezone);
+    usatzdatetime = tz.TZDateTime.from(now, cstTimezone);
+
+    return usatzdatetime;
+  }
+
   sendResult(Report report, String token, String result) async {
     tz.initializeTimeZones();
     var locations = tz.timeZoneDatabase.locations;

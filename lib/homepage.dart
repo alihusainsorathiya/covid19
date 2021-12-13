@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 // import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
 // import 'package:loadmore/loadmore.dart';
 
@@ -36,11 +37,13 @@ class _HomepageState extends State<Homepage> {
   Apiservice api = new Apiservice();
 
   List<Report> searchList = [];
+  DateTime currentDate = Apiservice().getUSDATE();
 
+  String formattedDate = "";
   @override
   Widget build(BuildContext context) {
     token = ModalRoute.of(context)!.settings.arguments;
-
+    formattedDate = formatDate(currentDate);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -67,13 +70,16 @@ class _HomepageState extends State<Homepage> {
                 child: ElevatedButton(
                   onPressed: () {
                     print("");
+                    selectDate(context);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.date_range),
-                      SizedBox(height: 10),
-                      Text(Apiservice().getDate().toString()),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(formattedDate.toString()),
                     ],
                   ),
                 )),
@@ -95,7 +101,9 @@ class _HomepageState extends State<Homepage> {
                         ),
                         Text(
                           "Loading Data...",
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -227,7 +235,6 @@ class _HomepageState extends State<Homepage> {
 
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(apiresult2)));
-                                  setState(() {});
                                 },
                                 child: Container(
                                   height: 40,
@@ -251,15 +258,60 @@ class _HomepageState extends State<Homepage> {
                               InkWell(
                                 onTap: () {
                                   debugPrint("Pressed Negative");
-                                  apiresult2 =
-                                      api.sendResult(report, token, "NEGATIVE");
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: AlertDialog(
+                                          title: Text('Title'),
+                                          content: Text('This is Demo'),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text('Go Back'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  // apiresult2 =    api.sendResult(report, token, "NEGATIVE");
                                   apiresult2 =
                                       "${report.jotformTestDclCode.toString() + "NEGATIVE"}" +
                                           apiresult2;
 
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(apiresult2)));
-                                  setState(() {});
+                                  //     SnackBar(content: Text(apiresult2)));
+
+                                  new AlertDialog(
+                                      title: new Text('Test'),
+                                      content: Column(
+                                        children: [
+                                          Container(
+                                            color: Colors.purple,
+                                            child: Column(
+                                              children: [
+                                                Text("Are you sure?"),
+                                                Text(""),
+                                                Text(
+                                                    "STOP - before finalizing this Rapid result, verify that the patient belongs to the correct site location. If not, please cancel and try again."),
+                                                Container(
+                                                  child: Column(
+                                                    children: [
+                                                      Text("Patient E-Mail	"),
+                                                      Text("Patient E-Mail	"),
+                                                      Text("Patient E-Mail	"),
+                                                      Text("Patient E-Mail	"),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ));
                                 },
                                 child: Container(
                                   height: 40,
@@ -290,5 +342,25 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
     );
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate) {
+      currentDate = pickedDate;
+      formattedDate = formatDate(currentDate);
+      setState(() {});
+    }
+  }
+
+  String formatDate(DateTime currentDate) {
+    var formatter = new DateFormat('yyyy/MM/dd');
+    String formatDate = formatter.format(currentDate);
+
+    return formatDate;
   }
 }
